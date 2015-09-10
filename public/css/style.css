@@ -1,0 +1,95 @@
+body {
+  background: url('/images/deep-blue.jpg') center center fixed no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+#wrapper {
+  margin-left: auto;
+  margin-right: auto;
+  width: 960px;
+}
+h4 {
+  text-align: center;
+}
+.headers {
+  color: white;
+}
+.quest-wrapper {
+  display: inline-block;
+  background-color: #fafafa;
+  border: solid #F1F1F2 1px;
+  width: 460px;
+  height: 410px;
+  border-radius: 10px;
+}
+#question {
+  margin-top: 25px;
+  margin-left: 50px;
+}
+#button, #clear {
+  border: solid black 1px;
+  background-color: inherit;
+  font-weight: bold;
+  float: right;
+  margin-top: 10px;
+  margin-right: 50px;
+  width: 100px;
+  height: 30px;
+}
+#button:hover, #clear:hover {
+  background-color: #50514F;
+  color: white;
+  cursor: pointer;
+}
+#output {
+  float: right;
+  border: solid #F1F1F2 1px;
+  overflow: scroll;
+  width: 460px;
+  height: 410px;
+  background-color: #fafafa;
+  display: none;
+  border-radius: 10px;
+}
+.watson {
+  width: 460px;
+  height: 430px;
+}
+#watson {
+  float: right;
+  width: 460px;
+  height: 410px;
+}
+.sub-personality {
+  margin-bottom: 5px;
+  clear: both;
+}
+.category-name {
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 35px;
+  float: left;
+}
+.category-percent {
+  float: right;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-right: 20px;
+}
+.op-head {
+  background-color: #50514F;
+  padding-top: 20px;
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  color: white;
+  clear: both;
+}
+.characteristic {
+  text-align: left;
+  margin-left: 20px;
+  margin-bottom: 5px;
+  clear: both;
+}

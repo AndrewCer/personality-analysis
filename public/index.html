@@ -1,0 +1,151 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Personality Test</title>
+		<link rel="stylesheet" href="/css/style.css">
+		<meta charset="utf-8">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+		<script src="conversion.js"></script>
+	</head>
+	<body>
+	<div class="background">
+	<div id="wrapper">
+		<div id="container">
+			<div class="headers">
+				<h1>Personality Analysis</h1>
+				<h6>Via Watson and Linguistic Analytics</h6>
+			</div>
+			<div class="quest-wrapper">
+				<textarea placeholder="Please enter a minimum of 100 words."
+				style="width: 355px; height: 285px;" id='question'></textarea>
+				<button id="button" type="submit">Analyze</button>
+				<button id="clear" type="button">Clear</button>
+				<button id="convert" type='submit'>Convert URL</button>
+			</div>
+			<div id="watson">
+				<img class="watson" src="/images/watson-transparent.png" alt="watson logo img">
+			</div>
+			<div id="output">
+			</div>
+		</div>
+	</div>
+		<script>
+		var button = document.getElementById('button');
+				input = document.getElementById('question'),
+				p = document.createElement('p'),
+				output = document.getElementById('output'),
+				wrapper = document.getElementById('wrapper'),
+				convert = document.getElementById('convert'),
+				container = document.getElementById('container'),
+				watsonDiv = document.getElementById('watson');
+				clearButton = document.getElementById('clear');
+		//work in progress for url to html conversion
+		// convert.addEventListener('click',	function () {
+		// 	urlInput(input);
+		// });
+		// var urlInput = function httpGet(url){
+		//     if (window.XMLHttpRequest)
+		//     {// code for IE7+, Firefox, Chrome, Opera, Safari
+		//         xmlhttp=new XMLHttpRequest();
+		//     }
+		//     else
+		//     {// code for IE6, IE5
+		//         xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+		//     }
+		//     xmlhttp.onreadystatechange=function()
+		//     {
+		//         if (xmlhttp.readyState==4 && xmlhttp.status==200)
+		//         {
+		//             return xmlhttp.responseText;
+		//         }
+		//     }
+		//     xmlhttp.open("GET", url, false);
+		//     xmlhttp.send();
+		// };
+		clearButton.addEventListener('click', function () {
+			input.value = '';
+			output.style.display = 'none';
+			watson.style.display = 'inherit';
+		});
+		button.addEventListener('click', function () {
+			var xhr = new XMLHttpRequest;
+			xhr.open('post', 'http://andrew-cer-watson-demo.mybluemix.net/question');
+			xhr.addEventListener('load', function () {
+				var responseParse = JSON.parse(xhr.response),
+						bigFive = responseParse.children[0],
+						userNeeds = responseParse.children[1],
+						userValues = responseParse.children[2],
+						bigFiveBolds = bigFive.children[0].children,
+						bigFiveSubCats = bigFive.children[0].children[0].children,
+						needs = responseParse.children[1],
+						values = responseParse.children[2];
+				output.style.display = 'inherit';
+				watson.style.display = 'none';
+				var subHeadersArray = getSubHeaders(bigFiveBolds);
+				//big five
+				h4 = document.createElement('h4');
+				h4.className = 'op-head';
+				h4.innerHTML = bigFive.name;
+				output.appendChild(h4);
+				displayResults(bigFiveSubCats, subHeadersArray[0]);
+				displayResults(bigFiveBolds[1].children, subHeadersArray[1]);
+				displayResults(bigFiveBolds[2].children, subHeadersArray[2]);
+				displayResults(bigFiveBolds[3].children, subHeadersArray[3]);
+				displayResults(bigFiveBolds[4].children, subHeadersArray[4]);
+				//needs
+				h4 = document.createElement('h4');
+				h4.className = 'op-head';
+				h4.innerHTML = userNeeds.name;
+				output.appendChild(h4);
+				displayResults(userNeeds.children[0].children, null);
+				//values
+				h4 = document.createElement('h4');
+				h4.className = 'op-head';
+				h4.innerHTML = userValues.name;
+				output.appendChild(h4);
+				displayResults(userValues.children[0].children, null);
+			});
+			xhr.send('q=' + input.value);
+		});
+		//create array of characteristics, ie...openness, conscientiousness
+		var getSubHeaders = function (input) {
+			var newArray = []
+			for (var i = 0; i < input.length; i++) {
+				newArray[i] = input[i].name
+			}
+			return newArray;
+		}
+		//DOM manipulation, create elements, display results of passed in info
+		var displayResults = function (traits, sub) {
+			var div = document.createElement('div');
+			div.className = 'bold-holder';
+			var characteristic = document.createElement('h4');
+			characteristic.className = 'characteristic';
+			output.appendChild(div);
+			div.appendChild(characteristic);
+			characteristic.innerHTML = sub;
+			for (var i = 0; i < traits.length; i++) {
+				//pass traits to decimal to precent conversion function and assign to variable
+				var percentOp = percentConvert(traits[i].percentage);
+						div = document.createElement('div'),
+						pName = document.createElement('p'),
+						pPercnt = document.createElement('p');
+				pName.className = 'category-name';
+				pPercnt.className = 'category-percent';
+				div.className = 'sub-personality';
+				output.appendChild(div);
+				div.appendChild(pName);
+				div.appendChild(pPercnt);
+				pName.innerHTML = traits[i].name;
+				pPercnt.innerHTML = percentOp;
+			}
+		};
+		//convert decimals to precents and concat % sign to the value
+		var percentConvert = function (decimal) {
+			decimal = (decimal * 100).toFixed();
+			return decimal + "%";
+		};
+		</script>
+	</div>
+	</body>
+</html>
